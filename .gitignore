@@ -1,1 +1,6 @@
-.aux, .gz, .log
+
+*.aux
+
+*.log
+
+*.gz

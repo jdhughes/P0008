@@ -1,0 +1,84 @@
+\documentclass[12pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+\usepackage{geometry}
+\geometry{letterpaper}
+\geometry{margin=1in}
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{color}
+
+\usepackage{amsmath}
+
+\usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{hyperref}
+\renewcommand{\UrlBreaks}{\do\/\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
+
+\begin{document}
+
+\noindent
+\textbf{Use of general purpose graphical processing units with MODFLOW-2005 \\ (Ground Water Manuscript GW20120518-0099) }\\
+
+\noindent
+\textbf{Authors:} Hughes, J.D., and White, J.T \\
+
+\today \\
+
+\noindent
+Internal reviews were performed by (1) Dr. Yong Liu a senior research scientist at the National Center for Supercomputing Applications (NCSA) University of Illinois at Urbana-Champaign, (2) Randy Hanson a research hydrologist in the California Water Science Center, and (3) Vevek Bedekar a professional engineer with  S.S. Papadopulos \& Associates, Inc. Randy Hanson provided a few comments in a review memorandum, which are included and addressed below, and as inline comments in the manuscript pdf; inline comments are addressed in the document titled MODFLOW-GPU\_03.jdhResponse.pdf. Internal review comments were helpful and have been addressed in the revised manuscript. Review comments are included (\textit{in italics}) prior to our responses. Revised material in the manuscript are indicated with \textcolor{blue}{blue} text.
+
+\section*{\small{Yong Liu Comments:}}
+\begin{enumerate}
+\item \textit{One thing that I would suggest to add is to say a few words about any possible future research (e.g., GPU cluster, Cloud-based GPU resources such as Amazon GPU cluster) and practical usage of GPU solvers for MODFLOW 2005 for real-world use cases (an example real-world use case that would benefit from using this research findings and the GPU solver would be excellent!.}
+
+Response
+
+\item \textit{It would be also nice if the authors can indicate where and how to obtain the source code (will it be in public domain just like the MODFLOW source code?.}
+
+Response
+
+\item \textit{It would be nice if you could also provide the python code so that I or someone else can reproduce some of your experiments.}
+
+Response
+
+\end{enumerate}
+
+\section*{\small{Randy Hanson Comments:}}
+\begin{enumerate}
+\item \textit{In particular the preconditioning seems to be an issue and one is left wondering if the code could be written better or is it simply a hardware issue given the structure of the code. I have made several inline comments that may give more details as to where these issues might require minor additional elaboration or insight based on your experience. Would a graph showing the change in performance while varying the inner and outer iterations for one of the models provide any additional insight on how to best set the combination of these two, or is this too problem dependent?} 
+
+Response. 
+
+\item \textit{The reader should also have a clear idea of how he could implement these choices and which choice is best for the problem at hand to some degree (although this may be outside the scope of this paper).} 
+
+Response. 
+
+\item \textit{The reader may also wonder if additional compilation features such as provided by Intel compiler for memory alignment, vectorization, use of coarrays, use of math-kernal library vectorized functions, or chip specific architectures could provide additional performance enhancements.} 
+
+Response. 
+
+\item \textit{Inline comments in pdf  MODFLOW-GPU\_03.pdf.} 
+
+See responses in MODFLOW-GPU\_03.jdhResponse.pdf.
+
+\end{enumerate}
+
+\section*{Vevek Bedekar Comments:}
+\begin{enumerate}
+\item \textit{Specify whether this work is first of its kind in applying GPUs in the field of groundwater modeling or specifically in the application of MODFLOW. Otherwise, cite other works that apply GPUs to solve groundwater simulations. The following two search results were found as a result of a quick Google search.} 
+
+\textit{\href{http://doi.acm.org/10.1145/1774088.1774588}{Ji, Xiaohui and Cheng, Tangpei and Wang, Qun, 2010, A simulation of large-scale groundwater flow on CUDA-enabled GPUs: Proceedings of the 2010 ACM Symposium on Applied Computing, 2402--2403. doi: 10.1145/1774088.1774588}}
+
+\textit{\href{http://www.gpucomputing.net/?q=node/14182}{Ji, Xiaohui and Cheng, Tangpei and Wang, Qun, 2010, CUDA-based solver for large-scale groundwater flow simulation: Engineering with Computers, 28(1), 13--19. doi: 10.1007/s00366-011-0213-2}}
+ 
+
+The second reference (Ji \textit{et al.}, 2012) is a reference in the manuscript but this is difficult to determine from the link provided. The first reference (Ji \textit{et al.}, 2012) was not included in the original manuscript since it is a conference proceeding and may be difficult for some readers to locate. It has been added to ensure Ji \textit{et al.}, 2010 is credited as being the first application of solving MODFLOW using GPGPUs. 
+
+
+\end{enumerate}
+
+\end{document}

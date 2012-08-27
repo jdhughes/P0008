@@ -1,0 +1,311 @@
+﻿	
+	RE: Modlfow GPU solver
+	Liu, Yong  
+	to:
+	Joseph D Hughes
+	05/21/2012 12:53 AM
+	Show Details
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+History:	This message has been forwarded.
+
+
+
+
+Hi Joe,
+
+I have read your manuscript. Here are my comments:
+
+ It is a very well-written technical and research article with sufficient 
+quantitative results and thorough discussion. I would recommend to be 
+submitted for publishing as soon as possible. One thing that I would 
+suggest to add is to say a few words about any possible future research 
+(e.g., GPU cluster, Cloud-based GPU resources such as Amazon GPU cluster) 
+and practical usage of GPU solvers for MODFLOW 2005 for real-world use 
+cases (an example real-world use case that would benefit from using this 
+research findings and the GPU solver would be excellent!). It would be 
+also nice if the authors can indicate where and how to obtain the source 
+code (will it be in public domain just like the MODFLOW source code?).
+
+Regarding your code:
+it would be nice if you could also provide the python code so that I or 
+someone else can reproduce some of your experiments.
+
+thanks and please let me know if the above review comments are ok.
+
+-Yong
+
+From: Joseph D Hughes [jdhughes@usgs.gov]
+Sent: Friday, May 18, 2012 3:11 PM
+To: Liu, Yong
+Subject: RE: Modlfow GPU solver
+
+Yong, 
+
+Thanks for agreeing to review our GPU manuscript. With regard to being an 
+"internal reviewer" I guess the more accurate description is a colleague 
+reviewer to satisfy our internal USGS review requirements. So from that 
+standpoint it does not matter if reviewers are internal or external to the 
+USGS. 
+I have attached a pdf of the manuscript. 
+
+
+
+I have uploaded the source code and Visual Studio 2008 project for the GPU 
+code to: 
+ftp://ftpext.usgs.gov/pub/er/fl/tampa/Hughes/GPU/ 
+
+I can also provide the python code I used to create and run the problems 
+described in the manuscript. 
+BR 
+Joe 
+
+
+________________________
+Joseph D. Hughes, Ph.D.
+Research Hydrologist
+U.S. Geological Survey 
+Florida Water Science Center
+10500 University Center Drive, Suite 215
+Tampa, FL  33612
+Phone:  813-498-5029
+FAX: 813-498-5002
+Email: jdhughes@usgs.gov 
+
+
+
+From:        "Liu, Yong" <yongliu@illinois.edu> 
+To:        Joseph D Hughes <jdhughes@usgs.gov>, Yong Liu 
+<yongliu@ncsa.illinois.edu> Date:        05/10/2012 10:11 AM 
+Subject:        RE: Modlfow GPU solver 
+
+
+
+Hi Joe,
+
+Thanks very much for your message and I am glad to know that your work is 
+finally done. I am sure this will have huge impact in both the Groundwater 
+community and the GPU computing community. I'll be glad to be your 
+internal reviewer (but I am an outsider of USGS, so why is this called an 
+"internal reviewer"? :) ). I would be also glad to get a copy of your code 
+and will certainly keep to myself and my group. If time permitting, we may 
+explore the GPU cluster and other scenarios in the future.
+
+Thanks,
+
+-Yong 
+
+From: Joseph D Hughes [jdhughes@usgs.gov]
+Sent: Thursday, May 10, 2012 8:49 AM
+To: Yong Liu
+Subject: Re: Modlfow GPU solver
+
+Yong, 
+
+We have finally gotten our act together and have a manuscript that we are 
+going to be submitting to Ground Water in the next week or so. We have 
+implemented a polynomial preconditioner and have seen speedups as high as 
+8 when compared to the standard MODFLOW PCG solver using the MIC 
+preconditioner. A  few remaining things I would like to explore in future 
+work is (1) extending the solver to multiple GPGPUs, (2) exploring 
+possible parallelization of a MIC preconditioner, and (3) adding the 
+ability to solve nonsymmetric matrices. 
+At the USGS we also have to have an internal colleague review, which can 
+be performed by people outside the USGS, and I was wondering if you would 
+be willing to be one of our internal reviewers? 
+I would be willing to provide you the current version of the code 
+regardless of whether you agree to review the manuscript or not. If you 
+would like to take a look at the code the only thing I would ask is that 
+you and your group keep the code within your group. 
+Hope all is well with you. 
+
+Joe 
+
+________________________
+Joseph D. Hughes, Ph.D.
+Research Hydrologist
+U.S. Geological Survey 
+Florida Water Science Center
+10500 University Center Drive, Suite 215
+Tampa, FL  33612
+Phone:  813-498-5029
+FAX: 813-498-5002
+Email: jdhughes@usgs.gov 
+
+
+
+From:        Yong Liu <yongliu@ncsa.illinois.edu> 
+To:        Joseph D Hughes <jdhughes@usgs.gov> 
+Cc:        Jeremy T White <jwhite@usgs.gov> 
+Date:        07/11/2011 10:28 AM 
+Subject:        Re: Modlfow GPU solver 
+
+
+
+Dear Joe,
+
+Is there any update on the Modflow GPU solver at USGS? 
+
+thanks,
+
+-Yong
+---------------------------------------
+Yong Liu, PhD
+Senior Research Scientist
+National Center for Supercomputing Applications (NCSA)                 
+University of Illinois at Urbana-Champaign                 
+Mailing Address: 
+NCSA, MC-257
+1205 W. Clark St.                 
+Urbana, IL 61801
+Office Address:
+4018 NCSA
+Phone: 217-265-7640 (O)
+Fax: 217-244-0287
+Email: yongliu@ncsa.illinois.edu
+Web Site: http://www.ncsa.illinois.edu/~yongliu/
+---------------------------------------
+
+
+----- Original Message -----
+From: "Yong Liu" <yongliu@ncsa.illinois.edu>
+To: "Joseph D Hughes" <jdhughes@usgs.gov>
+Cc: "Jeremy T White" <jwhite@usgs.gov>
+Sent: Friday, June 17, 2011 12:42:04 PM
+Subject: Re: Modlfow GPU solver
+
+Hi Joe,
+
+Thanks for the information. Yes, I would be interested in following up on 
+this GPU solver issue. We can start with testing the single GPU solver and 
+then we can collaborate on supporting multiple GPUs.
+
+-Yong
+
+---------------------------------------
+Yong Liu, PhD
+Senior Research Scientist
+National Center for Supercomputing Applications (NCSA)                 
+University of Illinois at Urbana-Champaign                 
+Mailing Address: 
+NCSA, MC-257
+1205 W. Clark St.                 
+Urbana, IL 61801
+Office Address:
+4018 NCSA
+Phone: 217-265-7640 (O)
+Fax: 217-244-0287
+Email: yongliu@ncsa.illinois.edu
+Web Site: http://www.ncsa.illinois.edu/~yongliu/
+---------------------------------------
+
+
+----- Original Message -----
+From: "Joseph D Hughes" <jdhughes@usgs.gov>
+To: "Yong Liu" <yongliu@ncsa.illinois.edu>
+Cc: "Jeremy T White" <jwhite@usgs.gov>
+Sent: Friday, June 17, 2011 12:06:50 PM
+Subject: Re: Modlfow GPU solver
+
+
+Hi Yong, 
+
+I was good talking to you as well. It would be great to collaborate on the 
+GPU solver for MODFLOW. I am currently in the process of implementing a 
+few polynomial preconditioners and hope to have them up an running on the 
+CPU in 2-4 weeks. It will probably take a more few weeks to get them 
+working with the GPU since we are balancing this effort with other work we 
+are doing. At that point we would be able to let you test drive the single 
+GPU solver. 
+We would have to do some more work to support multiple GPUs. Maybe this is 
+something you would be interested in working on. 
+Right now the plan is to get a manuscript for the GPU solver together for 
+Ground Water. We will probably limit it to what we have done so far plus 
+the polynomial preconditioner work currently underway. If possible we will 
+try and work with Alistair Black to include something on using the GPU to 
+also assemble the matrix. We could also include a multi-GPU evaluation if 
+we can get it done. My goal is to submit the manuscript to Ground Water no 
+later that December 2011. 
+And ultimately I want to implement other solver options for the GPU (e.g. 
+BiCGStab) so we can solve nonsymmetric matrices on the GPU as well. 
+Let me know if you guys are still interested. 
+
+BR 
+Joe 
+
+________________________ 
+Joseph D. Hughes, Ph.D. 
+Research Hydrologist 
+U.S. Geological Survey 
+Florida Water Science Center 
+10500 University Center Drive, Suite 215 
+Tampa, FL 33612 
+Phone: 813-498-5029 
+FAX: 813-498-5002 
+Email: jdhughes@usgs.gov 
+
+
+               From:                  Yong Liu <yongliu@ncsa.illinois.edu> 
+               To:                  jdhughes@usgs.gov 
+               Date:                  06/09/2011 04:08 PM 
+               Subject:                  Modlfow GPU solver 
+
+
+
+
+Hi Joesph, 
+
+It was a pleasure to talk to you after your talk at the Modflow and More 
+2011 conference yesterday. As I mentioned, I have been very interested in 
+working on the GPU-based solver for Modflow for a while. Now that you have 
+started this work, I wonder if it is possible for us to get involved. We 
+have a GPU cluster for research & Development ( 
+http://iacat.uiuc.edu/resources/cluster/ ) and a much larger scale NCSA 
+supercomputer "Lincoln" ( 
+http://www.ncsa.illinois.edu/UserInfo/Resources/Hardware/Intel64TeslaCluste
+r/ ). 
+Initially, maybe we can help test what you already have and then we may 
+move on some co-development effort. 
+Please let me know. 
+
+thanks, 
+
+-Yong 
+
+--------------------------------------- 
+Yong Liu, PhD 
+Senior Research Scientist 
+National Center for Supercomputing Applications (NCSA) 
+University of Illinois at Urbana-Champaign 
+Mailing Address: 
+NCSA, MC-257 
+1205 W. Clark St. 
+Urbana, IL 61801 
+Office Address: 
+4018 NCSA 
+Phone: 217-265-7640 (O) 
+Fax: 217-244-0287 
+Email: yongliu@ncsa.illinois.edu 
+Web Site: http://www.ncsa.illinois.edu/~yongliu/ 
+--------------------------------------- 
+
+
+
+

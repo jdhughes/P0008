@@ -44,27 +44,27 @@ Section numbering has been eliminated in the revised manuscript.
 \begin{enumerate}
 \item \textit{The introduction should also introduce the speedup potential and bottlenecks of GPGPU and parallel CPU processing for the UPCG solver.} 
 
-Response. 
+Additional discussion of ideal parallelization and issues that make achieving ideal speedup has been added to the introduction.
 
 \item \textit{Section 2 has too much jargon. I suggest removing what is irrelevant and explaining what is, in terms of how that helps speed up or slow down GPGPU processing compared to serial computing or multi-core processing on CPUs.} 
 
-Response. 
+We have attempted to eliminate all but the essential GPGPU jargon in the main text.  A significant portion of the jargon has been moved to Boxes 1 and 2.
 
 \item \textit{The manuscript needs to mention how the solver is available for M2K5 for the GPGPU and multi-core CPU versions (are they DLLs, how are they linked into the main code, etc). I do not expect people to generally compile their codes, let alone within CUDA. Some direction therefore is needed on accessibility.} 
 
-A section titled ``How to Obtain the Software'' has been added that provides information on how to obtain the software. 
+A section titled ``\textbf{How to Obtain the Software}'' has been added that provides information on how to obtain the software.  The source code and a precompiled Windows executable will be provided. Instructions for compiling the source code have been provided in the ``\textbf{How to Obtain the Software}''  section.
 
 \item \textit{Also, direction is needed on hardware that may be best suited for the GPUGPU processing will benefit this manuscript.} 
 
 The authors are not experts on the hardware that is best suited for GPGPU processing. Rather than providing guidance on appropriate hardware we feel it is more appropriate for potential users to consult with a qualified software dealer and identify the hardware that is most appropriate for their particular organization.
 
-\item \textit{GPGPU speedup has been compared to the PCG5 solver on a serial CPU. With more advanced solvers coming into the MODFLOW family (for example the XMD solver in MODFLOW-NWT,)it would be interesting to note the speedup of UPCG compared to even more robust higher level ILU solvers which may be even faster than PCG5 for hard problems.} 
+\item \textit{GPGPU speedup has been compared to the PCG5 solver on a serial CPU. With more advanced solvers coming into the MODFLOW family (for example the XMD solver in MODFLOW-NWT), it would be interesting to note the speedup of UPCG compared to even more robust higher level ILU solvers which may be even faster than PCG5 for hard problems.} 
 
-The analyses presented in this manuscript are not meant to be an exhaustive comparison of GPGPU solutions but an evaluation of the speedup possible. 
+The authors agree with the reviewer that higher level ILU preconditioners may be more effective than the standard MODFLOW PCG solver for particular types of problems. The analyses presented in this manuscript are not meant to be an exhaustive comparison of GPGPU solutions but an evaluation of the speedup possible when compared to a standard MODFLOW solver that uses a similar solution approach.  
 
 \item \textit{Issues with GPGPU processing for different schemes are scattered throughout the manuscript. These issues should be collated into a separate section or a table. For instance: GPGPU memory requirements for larger problems; need to maximize the amount of time spent in the linear solvers; the overhead associated with GPGPU-CPU memory copy operations relative to the solution time; higher percentage of runtime spent transferring preconditioner data; why the total time spent applying the preconditioner actually increases for the MILU0 preconditioner; what is less optimized in Intel FORTRAN for multi-core processing; details on problem size limitation due to RAM available on the GPGPU; and others.} 
 
-Response.
+The authors disagree with this comment. We believe the issues related to solution of the groundwater flow equation on a GPGPU are presented in the relevant locations and important issues are summarize again in the ``\textbf{Conclusions}'' section.
 
 \end{enumerate}
 
@@ -72,7 +72,7 @@ Response.
 \begin{enumerate}
 \item \textit{Overall, lots of jargon is used. Naturally, this is an emerging field, and one that many readers of Ground Water will not be familiar with, so the use of jargon will be difficult for the uninitiated reader. For example, lines 75-79 are filled with terms that will mean nothing to the average groundwater modeler - consider deleting (or moving to appendix or online material) this paragraph and other similar paragraphs that might not hold much meaning to the average reader.} 
 
-Response.
+We have tried to eliminate all non-essential GPGPU jargon and make the main text more readable for the typical Ground Water reader.  A significant portion of the jargon has been moved to Boxes 1 and 2 as suggested by the editor.
 
 \item \textit{Thorough comparisons were made for different preconditioners and different parallelization strategies and the authors did a great job of making the comparisons fair. Considering the results of the various preconditioners, it appears that Jacobi preconditioning is good enough for many of the problems, which leads me to believe that the K fields are fairly smooth (and the spread of the eigenvalues are nicely clustered). I tend to think of this as the exception in rather than the rule in most practical groundwater models. Can you provide guidance for using MIC vs. POLY vs. Jacobi based on the K field? In other words, I think these results are highly dependent on the K field and only 2 fields are used. How would the results vary if you stretched the contrasts in your K field? In that regard, to be fair, the GMG solver should also be used as a basis for comparison and give insight about which strategy should be used for optimal performance.} 
 
@@ -112,7 +112,7 @@ Response.
 
 \item \textit{Line 351 - "developed to *use* the PCG" (one does not "solve" the algorithm) } 
 
-Response.
+Suggested modification made.
 
 \item \textit{Line376 - as indicated above, can you provide some guidance here about when one approach might be better than another depending on the system properties (size, K field). Also, GMG should be included here to so that the full suite of approaches are compared (weak but highly parallelizable to strong but not very parallelizable). } 
 
@@ -137,7 +137,7 @@ Response.
 \begin{enumerate}
 \item \textit{Quality of figures should be improved (all figures but in particular, figures 3 to 6). Texts (titles and legends) are too small to read. Lines are very hard to read.} 
 
-Response. 
+The font sizes have been increased on all of the figures. The symbol size and lines on \textbf{figures 3}, \textbf{5}, and \textbf{6} have been increased and converted to solid colored lines, respectively, to improve the readability as suggested.
 
 \item \textit{Tables should be reworked. I do not think we need 3 digits after decimal point for these comparisons. Please also consider significant digits in the tables.} 
 
@@ -153,19 +153,19 @@ Response.
 
 \item \textit{Line 48: 448 $\rightarrow$ 448 cores. } 
 
-Response.
+Suggested addition made.
 
 \item \textit{Line 114: is L3/L3T correct? } 
 
-Response.
+Yes.
 
 \item \textit{Line 123: is L2/T correct? } 
 
-Response.
+Yes.
 
 \item \textit{Line 161: What is CUBLAS? } 
 
-Response.
+CUBLAS and BLAS have been defined.
 
 \item \textit{Line 199: Problem Description. Reasoning for choosing test cases is helpful for the readers. } 
 
@@ -173,7 +173,7 @@ Response.
 
 \item \textit{Line 236: "(10-0)/1000"is not necessary.} 
 
-Response.
+Suggested modification made.
 
 \end{enumerate}
 

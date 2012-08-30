@@ -84,15 +84,15 @@ Response.
 
 \item \textit{Line 26 - "can be *easily* parallelize"} 
 
-Response. 
+Suggested addition made. 
 
 \item \textit{Lines 28 - 34 - there is some time discrepancies here from 2005 to 1984, to 1988. Perhaps just say "MODFLOW" on line 28 and remove the "since 1984" and insert "numerous" before "two-and" } 
 
-Response.
+Suggested modification made. Also MODFLOW-2005 has been replaced with MODFLOW in the revised manuscript except where it is necessary to specifically discuss the current version of MODFLOW.
 
 \item \textit{Line 47 "present" (plural)} 
 
-Response. 
+Correction made. 
 
 \item \textit{Line 48 - unclear - faster at what exactly? Operations,cycles/second? } 
 
@@ -100,11 +100,11 @@ Response.
 
 \item \textit{Lines 75-108 is filled with a lot of technical jargon. Consider moving some of this to an appendix (as noted above). } 
 
-Response.
+A significant portion of the jargon has been moved to Boxes 1 and 2.
 
 \item \textit{Line 108 - really, the parallelization you mention can be applied to many simulators, not just MODFLOW-2005. Consider mentioning wider range applicability. } 
 
-Response.
+We have added text to indicate that GPGPU parallelization has great potential for MODFLOW and other numerical simulators.
 
 \item \textit{Line 213-214 - unclear. Consider rephrasing } 
 
@@ -120,7 +120,7 @@ Response.
 
 \item \textit{Figure 4 - I think this figure is extremely important as it shows where the speed ups occur. However, it is not clear how much time is spent in the GPU for the matrix-vector and BLAS operations because the bars seem to not show up on the scale? Can you include a value here so the reader does not assume these are zero. } 
 
-Response.
+Figure 4 has been modified as suggested.
 
 \item \textit{In light of the speed ups coming from CUBLAS operations being parallelized over the cells in the model, I am wondering if additional speed up could be obtained by using other primitives in the CUSparse library for the triangular solves and/or the decomposition? Was this considered as well? There is some new work that tries to parallelize ILU (see: http://research.nvidia.com/publication/parallel-incomplete-lu-and-cholesky-factorization-preconditioned-iterative-methods-gpu) } 
 

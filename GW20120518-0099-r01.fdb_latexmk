@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1346110035 "GW20120518-0099-r01.tex" "GW20120518-0099-r01.pdf" "GW20120518-0099-r01" 1346110038
+["pdflatex"] 1346366480 "GW20120518-0099-r01.tex" "GW20120518-0099-r01.pdf" "GW20120518-0099-r01" 1346366482
   "./Figures/Figure1.png" 1346093125 61580 40c4c6743d4354f7266d50ca95c571c2 ""
   "./Figures/Figure2.png" 1346110029 1616797 00f022f48b5415e513c86bb36ae3d90a ""
   "./Figures/Figure3a.png" 1346110029 67164 190efb653b6f7ff81fe1e540d0172b81 ""
@@ -22,8 +22,8 @@
   "Figures/Figure5a.png" 1346110029 60200 f613b5cf5d5aa37d514f2529cbf148c8 ""
   "Figures/Figure5b.png" 1346110029 71905 44be8364f99ff0bdcbea46ac752f4f16 ""
   "Figures/Figure6.png" 1346110029 64490 8fc9388a8da1de7a2aae1c80b283f240 ""
-  "GW20120518-0099-r01.aux" 1346110037 4583 8494ea7b854b7bd933b7c1aa0ad6fdbe ""
-  "GW20120518-0099-r01.tex" 1346109502 55501 2bcf25cda1cb14e9a767181bbff7a2c5 ""
+  "GW20120518-0099-r01.aux" 1346366482 4583 8494ea7b854b7bd933b7c1aa0ad6fdbe ""
+  "GW20120518-0099-r01.tex" 1346366479 55498 e9d3c9a1a6c5ea27b8abe3b183469906 ""
   "c:/texlive/2011/texmf-dist/fonts/map/fontname/texfonts.map" 1329542882 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "c:/texlive/2011/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1329536598 1004 54797486969f23fa377b128694d548df ""
   "c:/texlive/2011/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1329536598 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""

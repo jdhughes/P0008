@@ -96,7 +96,7 @@ Correction made.
 
 \item \textit{Line 48 - unclear - faster at what exactly? Operations,cycles/second? } 
 
-Response.
+This sentence has been revised to indicate that GPGPUs are capable of executing more floating point operations per second than CPUs.
 
 \item \textit{Lines 75-108 is filled with a lot of technical jargon. Consider moving some of this to an appendix (as noted above). } 
 
@@ -108,13 +108,13 @@ We have added text to indicate that GPGPU parallelization has great potential fo
 
 \item \textit{Line 213-214 - unclear. Consider rephrasing } 
 
-Response.
+This sentence has been rephrased to clarify the description of the thickness of layer 1.
 
 \item \textit{Line 351 - "developed to *use* the PCG" (one does not "solve" the algorithm) } 
 
 Suggested modification made.
 
-\item \textit{Line376 - as indicated above, can you provide some guidance here about when one approach might be better than another depending on the system properties (size, K field). Also, GMG should be included here to so that the full suite of approaches are compared (weak but highly parallelizable to strong but not very parallelizable). } 
+\item \textit{Line 376 - as indicated above, can you provide some guidance here about when one approach might be better than another depending on the system properties (size, K field). Also, GMG should be included here to so that the full suite of approaches are compared (weak but highly parallelizable to strong but not very parallelizable). } 
 
 Response.
 
@@ -126,10 +126,6 @@ Figure 4 has been modified as suggested.
 
 Response.
 
-\item \textit{As indicated above lines 75-108 are filled with jargon and should be reconsidered. 
-Response.} 
-
-Response.
 
 \end{enumerate}
 
@@ -141,15 +137,15 @@ The font sizes have been increased on all of the figures. The symbol size and li
 
 \item \textit{Tables should be reworked. I do not think we need 3 digits after decimal point for these comparisons. Please also consider significant digits in the tables.} 
 
-Response. 
+Double-precision floating point variables are used in the solvers and the tables have been rounded to single-precision numbers. Since we are reporting results from a numerical analysis we thought it appropriate to retain a larger number of digits to allow readers the ability to evaluate our results differently than we have. For example it would be possible for readers to calculate accurate run times (in seconds) for each of the simulations summarized in \textbf{table 2} using the speedup values and MIC cpu times. This may be of benefit for future studies conducted by other researchers. However, we would be willing to modify the number of digits reported if the editor agrees with this comment.
 
 \item \textit{The authors only consider total execution time which includes time required for both Picard and linear solver iterations. Did you closely examined these iteration performance in solver comparisons? How these iteration performance changes among different preconditioning schemes? } 
 
-Response.
+\textbf{Table 4} has been added which includes information on the number of iterations required for each of the solvers and various preconditioners. Additional discussion has been added in the \textbf{Discussion} section to provide some guidance on the strength of the preconditioners for the problems evaluated.
 
 \item \textit{Lines 28-32: the authors mentioned computational performance changes due to domain discretization. Does this cause by FD formulation or matrix solver scheme? Explanation is needed. } 
 
-Response.
+This is primarily based on the increase in the number of simultaneous linear equations being solved. Differences in the \textbf{A} matrix resulting from different cell sizes can also affect solver performance. Additional clarification has been added. 
 
 \item \textit{Line 48: 448 $\rightarrow$ 448 cores. } 
 
@@ -169,7 +165,7 @@ CUBLAS and BLAS have been defined.
 
 \item \textit{Line 199: Problem Description. Reasoning for choosing test cases is helpful for the readers. } 
 
-Response.
+Additional discussion of the reasons the particular test cases were evaluated has been provided.
 
 \item \textit{Line 236: "(10-0)/1000"is not necessary.} 
 

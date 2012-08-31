@@ -4,7 +4,7 @@
 %%% PAGE DIMENSIONS
 \usepackage{geometry}
 \usepackage{lineno}
-\usepackage{color}
+\usepackage{color, colortbl}
 \usepackage[kernelfbox]{xcolor}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -60,14 +60,14 @@ MODFLOW (Harbaugh 2005) is a finite-difference groundwater flow model that has b
 
 Parallelization of linear solvers is another approach for accommodating larger model sizes. \color{blue}Ideal parallelization would result in a linear speedup  (CPU runtime / parallel runtime) as additional CPUs and/or computers were applied to any given problem. For example, if ideal parallelization were achieved and 2, 3, 4, and 5 CPUs were applied to a problem the speedup would be 2, 3, 4, and 5, respectively. However, ideal parallelization is rarely, if ever, achieved because of communication bottlenecks which may be a result of hardware limitations and/or use of algorithms that are difficult to parallelize.
 
-\color{black}Dong and Li (2009) parallelized the MODFLOW PCG solver (Hill 1990) using the OpenMP (OpenMP Architecture Review Board, 2005) programming paradigm and observed speedups as large as 5 on machines with multi-core CPUs. Naff (2008) developed a parallelized linear solver for MODFLOW using the Message Passing Interface (MPI) standard and observed a speedup of 7. In addition to OpenMP and MPI, GPGPUs also \color{blue}present \color{black}an option for linear solver parallelization. In comparison to CPUs, GPGPUs are much faster, have higher bandwidth, and typically more cores (\textit{e.g.}, 448 \color{blue} cores \color{black} in the case of the NVIDIA$^{\textregistered}$ Tesla™ C2050 and C2070 GPGPUs). Use of GPGPUs to parallelize linear solvers for MODFLOW is also attractive because of the availability of the CUDA (Compute Unified Device Architecture) application programming interface (API) for NVIDIA GPGPUs, which supports development of parallel GPGPU code in C/C++ or Python, Fortran, Java, and MATLAB using wrappers around the C/C++ implementation. For example, Soni \textit{et al.} (2012) used the CUDA language to develop a GPGPU code to solve computational fluid dynamics problems. For solution of the groundwater flow equation, Ji \textit{et al.} (2012) developed a parallel GPGPU version of MODFLOW-2000 with a Jacobi preconditioner and observed speedups ranging from 1.8 to 3.7.
+\color{black}Dong and Li (2009) parallelized the MODFLOW PCG solver (Hill 1990) using the OpenMP (OpenMP Architecture Review Board, 2005) programming paradigm and observed speedups as large as 5 on machines with multi-core CPUs. Naff (2008) developed a parallelized linear solver for MODFLOW using the Message Passing Interface (MPI) standard and observed a speedup of 7. In addition to OpenMP and MPI, GPGPUs also \color{blue}present \color{black}an option for linear solver parallelization. In comparison to CPUs, GPGPUs \color{blue}typically have more cores (\textit{e.g.}, 448 cores in the case of the NVIDIA$^{\textregistered}$ Tesla™ C2050 and C2070 GPGPUs), have higher bandwidth, and as a result are capable of executing more floating point operations per second. \color{black}Use of GPGPUs to parallelize linear solvers for MODFLOW is also attractive because of the availability of the CUDA (Compute Unified Device Architecture) application programming interface (API) for NVIDIA GPGPUs, which supports development of parallel GPGPU code in C/C++ or Python, Fortran, Java, and MATLAB using wrappers around the C/C++ implementation. For example, Soni \textit{et al.} (2012) used the CUDA language to develop a GPGPU code to solve computational fluid dynamics problems. For solution of the groundwater flow equation, Ji \textit{et al.} (2012) developed a parallel GPGPU version of MODFLOW-2000 with a Jacobi preconditioner and observed speedups ranging from 1.8 to 3.7.
 
 In this paper, we evaluate speedups resulting from GPGPU parallelization of the unstructured UPCG linear solver for a unconfined groundwater flow problem. We also evaluate the performance of the UPCG linear solver using Jacobi, zero fill-in modified incomplete LU (MILU0), and generalized least-squares polynomial (GLSPOLY) preconditioners on the CPU and GPGPU. And finally, we evaluate the performance of the UPCG solver on the GPGPU to parallel CPU simulations using the OpenMP parallel programming paradigm.
 
 \section* {\bf GPGPU Parallel Programming}
 GPGPU code developed using the NVIDIA$^{\textregistered}$ CUDA API is essentially a sequential code that is capable of using the fork-join model of parallel execution similar to OpenMP. In a fork-join model, a single master thread is active when program execution begins. The master thread executes sequential portions of the code. At points where parallel operations are required, the master thread spawns, or forks, additional threads that work concurrently with the master thread through the parallel section. At the end of the parallel code, the spawned threads are suspended and rejoined to the master thread. The fork-join model used in OpenMP is shown graphically in \textbf{figure~\ref{FigParallel}}. Typically, the number of OpenMP threads used in the fork-join model is less than the total number of cores available on multi-core CPUs.
 
-For GPGPU code implementations, the concept is similar to OpenMP.  The main code is a sequential host code which forks the data into many threads at the invocation of a CUDA \color{blue}functions, called kernels (\textbf{Box 1})\color{black}.  \color{blue}However, as opposed to the few threads spawned by OpenMP, GPGPUs have to potential to spawn thousands to tens-of-thousands of threads to execute the CUDA kernel function (\textbf{Box 2}). The NVIDIA Tesla C2050 used to evaluate the UPCG solver in this study can execute 21,504 concurrent threads. \color{black} With thread counts on the order of tens of thousands, GPGPUs have great potential for parallelization \color{blue} not just for MODFLOW, but for most numerical modeling applications\color{black}.
+For GPGPU code implementations, the concept is similar to OpenMP.  The main code is a sequential host code which forks the data into many threads at the invocation of a CUDA \color{blue}functions, called kernels (\textbf{Box 1})\color{black}.  \color{blue}However, as opposed to the few threads spawned by OpenMP, GPGPUs have to potential to spawn thousands to tens-of-thousands of threads to execute the CUDA kernel function (\textbf{Box 2}). The NVIDIA Tesla C2050 used to evaluate the UPCG solver in this study can execute 21,504 concurrent threads. \color{black} With thread counts on the order of tens of thousands, GPGPUs have great potential for parallelization \color{blue} for MODFLOW and other numerical simulators that use Krylov subspace methods to solve large systems of simultaneous linear equations\color{black}.
 
 
 \section* {\bf Conjugate Gradient Linear Solver}
@@ -149,9 +149,9 @@ Infinity norms ($\left \|  x \right \|_{\infty}$) are used to evaluate convergen
 The performance of the GPGPU implementation of the UPCG linear solver was evaluated on a NVIDIA Tesla C2050 GPGPU with 3 GB of RAM and capable of 515 GFLOP/sec of double precision processing perfomance (NVIDIA compute capability 2.0). The GPGPU was mounted in a 16-pin PCI local bus on a single quad core Intel Xenon 3GHz CPU, capable of executing 4 threads per CPU, with 6 GB of RAM and running a 64-bit version of the Windows 7 Enterprise OS. For comparison with GPGPU results, parallel CPU simulations were executed on dual 4-core Intel Xenon 2.4 GHz CPUs, capable of executing 8 parallel threads, with 16 GB of RAM running a 64-bit version of the Windows Server 2008 R2 Standard OS (Service Pack 1).
 
 \subsection*{Problem Description}
-GPGPU and parallel CPU results were evaluated using a number of horizontal and vertical model discretizations of a 1,000 m square heterogeneous unconfined aquifer.  The top and bottom of the aquifer are flat and specified to have elevations of 10 and -30 m, respectively. Models with horizontal discretizations of 200 $\times$ 200, 500 $\times$ 500, 1,000 $\times$ 1,000, 2,000 $\times$ 2,000, and 4,000 $\times$ 4,000 cells per layer were evaluated. Single layer models were evaluated for all horizontal discretizations and multi-layer models were evaluated for select horizontal discretizations to determine the effect that a 7-point stencil, and the resulting additional non-zero entries for each cell, has on GPGPU and parallel CPU execution time. Two- and three-layer models were evaluated for all horizontal discretizations except 4,000 $\times$ 4,000 cells per layer. Ten-layer models were also evaluated for horizontal discretizations ranging from 200 $\times$ 200 to 1,000 $\times$ 1,000 cells per layer. Additional horizontal and vertical discretizations were not evaluated because of GPGPU memory requirements for larger problems. For multi-layer models, a constant layer thickness was used for all but the first layer and was calculated by dividing 30 m by the number of layers. The thickness of layer 1 was calculated to be sum of the top elevation of the model (10 m) and constant thickness used for layers 2 and below.
+GPGPU and parallel CPU results were evaluated using a number of horizontal and vertical model discretizations of a 1,000 m square heterogeneous unconfined aquifer.  The top and bottom of the aquifer are flat and specified to have elevations of 10 and -30 m, respectively. Models with horizontal discretizations of 200 $\times$ 200, 500 $\times$ 500, 1,000 $\times$ 1,000, 2,000 $\times$ 2,000, and 4,000 $\times$ 4,000 cells per layer were evaluated. Single layer models were evaluated for all horizontal discretizations and multi-layer models were evaluated for select horizontal discretizations to determine the effect that a 7-point stencil, and the resulting additional non-zero entries for each cell, has on GPGPU and parallel CPU execution time. Two- and three-layer models were evaluated for all horizontal discretizations except 4,000 $\times$ 4,000 cells per layer. Ten-layer models were also evaluated for horizontal discretizations ranging from 200 $\times$ 200 to 1,000 $\times$ 1,000 cells per layer. Additional horizontal and vertical discretizations were not evaluated because of GPGPU memory requirements for larger problems. For multi-layer models, a constant layer thickness was used for all but the first layer and was calculated by dividing 30 m by the number of layers. \color{blue}Layer 1 also includes the thickness of the aquifer above the arbitrary elevation of 0 m and therefore is 10 m thicker than layer 2.
 
-The heterogeneous hydraulic conductivity distribution (base hydraulic conductivity data) was generated for the 1,000 $\times$ 1,000 cell model (base model) using sequential Gaussian simulation with log-transformed (base 10) parameters based on a mean value of 5 m/d and an exponential variogram having a nugget of 1.023 $\log_{10}((m/d)^{2})$, a variance of 1.23 $\log_{10}((m/d)^{2})$, and length parameter ($a$) of 250.5 m (effective range $\approx$ 750 m). The axis of anisotropy was rotated by 45 degrees to the model grid and a 3.5:1 ratio of horizontal anisotropy was used. For the realization selected and used to evaluate GPGPU and parallel CPU results, the minimum, average, and maximum hydraulic conductivity in the model domain were 0.43, 4.81, and 43.3 m/d, respectively. The distribution of hydraulic conductivity in the model domain is shown in \textbf{figure~\ref{FigModelDomain}}.
+\color{black}The heterogeneous hydraulic conductivity distribution (base hydraulic conductivity data) was generated for the 1,000 $\times$ 1,000 cell model (base model) using sequential Gaussian simulation with log-transformed (base 10) parameters based on a mean value of 5 m/d and an exponential variogram having a nugget of 1.023 $\log_{10}((m/d)^{2})$, a variance of 1.23 $\log_{10}((m/d)^{2})$, and length parameter ($a$) of 250.5 m (effective range $\approx$ 750 m). The axis of anisotropy was rotated by 45 degrees to the model grid and a 3.5:1 ratio of horizontal anisotropy was used. For the realization selected and used to evaluate GPGPU and parallel CPU results, the minimum, average, and maximum hydraulic conductivity in the model domain were 0.43, 4.81, and 43.3 m/d, respectively. The distribution of hydraulic conductivity in the model domain is shown in \textbf{figure~\ref{FigModelDomain}}.
 
 Hydraulic conductivity was not varied between layers in the multi-layer models evaluated. For models having less than 1,000 $\times$ 1,000 cells per layer, the base hydraulic conductivity data was averaged for each base model cell contained in a coarse model cell. For models having more than 1,000 $\times$ 1,000 cells per layer, the base hydraulic conductivity data was directly assigned to each higher-resolution cell contained within a coarse base model cell.
 
@@ -282,7 +282,7 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
 %Table1
 \newpage
 \begin{table}[hp]
-   \caption{Speedup of UPCG solver GPGPU simulations relative to CPU simulations for the same UPCG preconditioner. Speedup values in \textbf{bold} type indicate simulations that did not converge within 50 outer iterations with up to 1,000 inner iterations.}
+   \caption{Speedup of UPCG solver GPGPU simulations relative to CPU simulations for the same UPCG preconditioner. Speedup values in shaded cells indicate simulations that did not converge within 50 outer iterations requiring as much as 1,000 inner iterations.}
    \label{TableGPUCPUSpeedup}
    \begin{tabular}{ l | c | c | c |}
  		\cline{2-4}
@@ -292,7 +292,7 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
         \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 1 } &  9.536 &  1.699 & 16.315 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 1 } & 18.871 &  1.404 & 26.786 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 2000 $\times$ 2000 $\times$ 1 } & 24.453 &  1.938 & 33.615 \\ \cline{1-4}
-        \multicolumn{1}{| l |}{ 4000 $\times$ 4000 $\times$ 1 } & \textbf{26.918} &  1.936 & 35.154 \\ \cline{1-4}
+        \multicolumn{1}{| l |}{ 4000 $\times$ 4000 $\times$ 1 } & \cellcolor{gray} 26.918 &  1.936 & 35.154 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 200 $\times$ 200 $\times$ 2 } &  3.234 &  1.517 &  6.146 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 2 } & 13.420 &  1.742 & 18.665 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 2 } & 19.877 &  1.322 & 25.420 \\ \cline{1-4}
@@ -310,7 +310,7 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
 %Table2
 \newpage
 \begin{table}[hp]
-   \caption{Speedup of UPCG solver GPGPU simulations relative to simulations performed using the PCG solver with the modified incomplete Cholesky (MIC) preconditioner. CPU times for the PCG solver with the MIC preconditioner are in seconds. Speedup values in \textbf{bold} type indicate simulations that did not converge within 50 outer iterations with up to 1,000 inner iterations.}
+   \caption{Speedup of UPCG solver GPGPU simulations relative to simulations performed using the PCG solver with the modified incomplete Cholesky (MIC) preconditioner. CPU times for the PCG solver with the MIC preconditioner are in seconds. Speedup values in  in shaded cells indicate simulations that did not converge within 50 outer iterations requiring as much as 1,000 inner iterations.}
    \label{TableGPUSpeedup}
    \begin{tabular}{ l | c | c | c | c |}
  		\cline{2-5}
@@ -320,7 +320,7 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
         \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 1 } & 10.27194 &  1.675 &  1.543 &  2.294 \\ \cline{1-5}
         \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 1 } & 75.64222 &  3.241 &  1.239 &  2.957 \\ \cline{1-5}
         \multicolumn{1}{| l |}{ 2000 $\times$ 2000 $\times$ 1 } & 536.2608 &  1.891 &  1.438 &  2.754 \\ \cline{1-5}
-        \multicolumn{1}{| l |}{ 4000 $\times$ 4000 $\times$ 1 } & 3891.683 & \textbf{ 1.357} &  1.696 &  2.839 \\ \cline{1-5}
+        \multicolumn{1}{| l |}{ 4000 $\times$ 4000 $\times$ 1 } & 3891.683 & \cellcolor{gray} 1.357 &  1.696 &  2.839 \\ \cline{1-5}
         \multicolumn{1}{| l |}{ 200 $\times$ 200 $\times$ 2 } & 1.683125 &  1.081 &  1.330 &  1.633 \\ \cline{1-5}
         \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 2 } & 24.66269 &  3.156 &  1.534 &  3.497 \\ \cline{1-5}
         \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 2 } & 175.7042 &  4.111 &  1.156 &  3.532 \\ \cline{1-5}
@@ -338,7 +338,7 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
 %Table3
 \newpage
 \begin{table}[hp]
-   \caption{Speedup of UPCG solver OpenMP simulations, with 4, 7, and 14 threads, relative to simulations performed using the PCG solver with the modified incomplete Cholesky (MIC) preconditioner. Speedup values in \textbf{bold} type indicate simulations that did not converge within 50 outer iterations with up to 1,000 inner iterations.}
+   \caption{Speedup of UPCG solver OpenMP simulations, with 4, 7, and 14 threads, relative to simulations performed using the PCG solver with the modified incomplete Cholesky (MIC) preconditioner. Speedup values in in shaded cells indicate simulations that did not converge within 50 outer iterations requiring as much as 1,000 inner iterations.}
    \label{TableOpenMPSpeedup}
    \begin{tabular}{ l | c | c | c |}
  		\cline{2-4}
@@ -348,7 +348,7 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
         \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 1 } & 0.447/0.332/0.357 & 1.637/1.197/1.164 & 0.571/0.364/0.535 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 1 } & 0.409/0.419/0.359 & 1.488/1.463/1.194 & 0.313/0.323/0.309 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 2000 $\times$ 2000 $\times$ 1 } & 0.185/0.182/0.151 & 1.691/1.622/1.286 & 0.225/0.272/0.198 \\ \cline{1-4}
-        \multicolumn{1}{| l |}{ 4000 $\times$ 4000 $\times$ 1 } & \textbf{0.111}/\textbf{0.099}/\textbf{0.108} & 1.619/1.523/1.670 &  0.222/0.241/0.245 \\ \cline{1-4}
+        \multicolumn{1}{| l |}{ 4000 $\times$ 4000 $\times$ 1 } & \cellcolor{gray}0.111/0.099/0.108 & 1.619/1.523/1.670 &  0.222/0.241/0.245 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 200 $\times$ 200 $\times$ 2 } & 1.113/1.090/1.004 & 1.954/2.258/1.567 & 1.171/1.147/1.626 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 2 } &  0.536/0.567/0.460 & 1.500/1.521/1.151 & 0.525/0.625/0.556 \\ \cline{1-4}
         \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 2 } & 0.527/0.472/0.411 & 1.543/1.474/1.227 & 0.396/0.295/0.335 \\ \cline{1-4}
@@ -363,8 +363,39 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
        \end{tabular}
    \end{table}
 
+%Table4
+
+\newpage
+\begin{table}[hp]
+\caption{Convergence summary for simulations using the PCG solver with the MIC preconditioner, the GMG solver with the ILU0 preconditioner, and the UPCG solver with the Jacobi, MILU0, and GLSPOLY preconditioners. The total number of outer and inner iterations are shown (outer/inner). Shaded cells indicate simulations that did not converge within 50 outer iterations requiring as much as 1,000 inner iterations.}
+   \label{tab:UPCGITSummary}
+   \begin{tabular}{ l | c | c | c | c | c |}
+ 		\cline{2-6}
+		& \multicolumn{5}{c|}{Convergence History} \\ \cline{1-6}
+		\multicolumn{1}{|c|}{Columns $\times$ Rows $\times$ Layers} & MIC & GMG & Jacobi & MILU0 & GLSPOLY \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 200 $\times$ 200 $\times$ 1 } & 6/140 & 5/7 & 5/955 & 6/136 & 6/130 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 1 } & 7/312 & 5/9 & 6/2629 & 7/298 & 7/352 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 1 } & 9/574 & 6/10 & 8/4624 & 8/547 & 7/765 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 2000 $\times$ 2000 $\times$ 1 } & 8/1022 & 7/14 & 21/17862 & 8/980 & 8/1752 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 4000 $\times$ 4000 $\times$ 1 } & 9/1859 & 8/16 & \cellcolor{gray}50/50000 & 9/1758 & 9/3257 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 200 $\times$ 200 $\times$ 2 } & 6/151 & 5/7 & 5/811 & 6/145 & 5/123 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 2 } & 6/334 & 7/12 & 5/2073 & 6/315 & 5/276 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 2 } & 7/597 & 8/16 & 6/4102 & 7/562 & 6/633 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 2000 $\times$ 2000 $\times$ 2 } & 7/902 & 20/33 & 17/15342 & 7/864 & 5/1363 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 200 $\times$ 200 $\times$ 3 } & 6/167 & 5/6 & 5/788 & 5/154 & 5/124 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 3 } & 5/335 & 6/11 & 5/1967 & 5/319 & 5/261 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 3 } & 7/685 & 7/14 & 6/4059 & 6/633 & 5/637 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 2000 $\times$ 2000 $\times$ 3 } & 6/1069 & 23/33 & 16/14848 & 6/1003 & 5/1359 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 200 $\times$ 200 $\times$ 10 } & 6/291 & 5/7 & 5/955 & 6/273 & 5/164 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 500 $\times$ 500 $\times$ 10 } & 5/546 & 6/9 & 5/1908 & 5/512 & 5/275 \\ \cline{1-6}
+        \multicolumn{1}{| l |}{ 1000 $\times$ 1000 $\times$ 10 } & 7/1014 & 7/13 & 6/3913 & 6/955 & 5/521 \\ \cline{1-6}
+       \end{tabular}
+   \end{table}
+
+
 %Figure 1
 \newpage
+
 \begin{figure}[hp]
  	\centering
   	\includegraphics[width=17.15cm]{Figure1.png}

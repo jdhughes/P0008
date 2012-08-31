@@ -42,6 +42,10 @@ INPUT c:/texlive/2011/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 INPUT c:/texlive/2011/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 INPUT c:/texlive/2011/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 INPUT c:/texlive/2011/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+INPUT c:/texlive/2011/texmf-dist/tex/latex/colortbl/colortbl.sty
+INPUT c:/texlive/2011/texmf-dist/tex/latex/colortbl/colortbl.sty
+INPUT c:/texlive/2011/texmf-dist/tex/latex/tools/array.sty
+INPUT c:/texlive/2011/texmf-dist/tex/latex/tools/array.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/xcolor/xcolor.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/xcolor/xcolor.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/latexconfig/color.cfg
@@ -93,8 +97,6 @@ INPUT c:/texlive/2011/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/setspace/setspace.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/setspace/setspace.sty
-INPUT c:/texlive/2011/texmf-dist/tex/latex/tools/array.sty
-INPUT c:/texlive/2011/texmf-dist/tex/latex/tools/array.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT c:/texlive/2011/texmf-dist/tex/latex/booktabs/booktabs.sty

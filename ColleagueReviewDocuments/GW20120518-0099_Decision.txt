@@ -1,0 +1,255 @@
+﻿	
+	Manuscript # GW20120518-0099 Decision
+	editorgw  
+	to:
+	jdhughes
+	06/29/2012 01:31 PM
+	Show Details
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+History:	This message has been replied to and forwarded.
+
+
+
+
+
+
+June 29, 2012: 
+
+
+Dear Joseph: 
+
+The review of your manuscript "Use of general purpose graphical processing 
+units with MODFLOW-2005" is complete.The paper was examined by three 
+reviewers. Generally, they liked the paper and recommended publication 
+with minor revisions. I concur with their assessment and would ask you to 
+undertake revisions that take into account the reviewers' comments listed 
+below. This paper is the first of its kind for Ground Water and I think 
+readers will be excited about it. 
+Many of the suggested changes are technical in nature and these should be 
+straightforward. The main issue that I would ask you to address is that of 
+"jargon' raised by two of the reviewers. This paper is particular 
+important, given its novelty, and yet it will leave many readers behind. I 
+think a strong effort to reduce/explain terms on you part could enhance 
+the general readability and raise the interest level appropriately. The 
+reviewers make suggestions in this respect, but use your own ideas. 
+Perhaps a few (2 or 3) sidebar elements in the paper (we do these now) 
+could provide something like a running glossary, or alternatively a 
+layman's translation to the denser material. Please think about this 
+carefully. 
+Prepare a response to the reviewers' comments and a revised manuscript. I 
+will ask at least one of the reviewers for an opinion regarding the 
+revised manuscript. In your response to the reviewers, please list each 
+comment separately and state both how you changed the manuscript in 
+response and where the changes are located in the revised manuscript (page 
+and paragraph). If you disagree with a comment, please say so and make an 
+argument in support of your position. 
+Please revise your manuscript using a word processing program and save the 
+revised copy on your computer. Highlight the changes to your manuscript 
+within the document by using the track changes mode in MS Word or by using 
+colored text. I ask that at this time you prepare the manuscript in 
+accordance with the format used in the journal (see a recent issue of 
+Ground Water and/or the guidelines posted on our website www.ngwa.org). 
+After 12 June 2009 papers will be edited to use the one-word spelling of 
+"groundwater". Please review your paper carefully for factual errors, 
+incomplete references, and general flow and readability of text. Also, it 
+is good form to name the reviewers who have identified themselves in the 
+acknowledgments section of your paper. 
+In revising your paper, please keep in mind that there is a page charge of 
+$250 for each page over the first 6 published pages. There are 
+approximately 950 words per published page but you must also allow space 
+for figures, tables and reference citations within the 6 page limit. 
+Please check to make sure your figures meet our guidelines listed at 
+http://authorservices.wiley.com/bauthor/illustration.asp 
+
+PLEASE NOTE: Beginning in January 2009, all figures submitted in color 
+will be published in color in both the online and print versions of the 
+article, FREE OF CHARGE. We ask that you keep in mind, however, that NGWA 
+incurs additional costs for all color figures. Therefore, please use color 
+only when necessary for clarity of presentation. 
+Please upload your response (rebuttal) to the reviewers' comments and your 
+revised manuscript within *****60 days***** of today's date. Upload these 
+files to our website at http://groundwater.msubmit.net using the same 
+manuscript number as before. If you need to upload additional files, look 
+for the ADD FILE link, which will allow you to upload new files. 
+If the manuscript is not returned within the prescribed time we will 
+consider the paper withdrawn. If you have a good reason for requiring more 
+time to make the revisions, please contact me at gweditor@geology.wisc.edu 
+about the possibility of obtaining an extension of the deadline. 
+Thank you for submitting your manuscript to "Ground Water." I look forward 
+to receiving the revised version of your paper. 
+
+Sincerely yours, 
+
+Frank W. Schwartz 
+Editor-in-Chief 
+Ground Water 
+
+---------------------------------------- 
+Editor's Comments 
+
+1. Our layout doesn't require section numbering, so please delete those. 
+
+-------------------------------------------------------------------- 
+Reviewer #1 (Written Evaluation (Required)): 
+
+The manuscript discusses a GPGPU (video card) implementation of a PCG 
+solver for MODFLOW-2005. This is a topic of keen interest to the MODFLOW 
+community, to understand the gains achievable from massively parallel 
+processing and get their hands on the tools that can help. I suggest 
+publication with the following recommended enhancements to the manuscript. 
+
+1. The introduction should also introduce the speedup potential and 
+bottlenecks of GPGPU and parallel CPU processing for the UPCG solver. 
+2. Section 2 has too much jargon. I suggest removing what is irrelevant 
+and explaining what is, in terms of how that helps speed up or slow down 
+GPGPU processing compared to serial computing or multi-core processing on 
+CPUs. 
+3. The manuscript needs to mention how the solver is available for M2K5 
+for the GPGPU and multi-core CPU versions (are they DLLs, how are they 
+linked into the main code, etc). I do not expect people to generally 
+compile their codes, let alone within CUDA. Some direction therefore is 
+needed on accessibility. 
+4. Also, direction is needed on hardware that may be best suited for the 
+GPUGPU processing will benefit this manuscrit. 
+5. GPGPU speedup has been compared to the PCG5 solver on a serial CPU. 
+With more advanced solvers coming into the MODFLOW family (for example the 
+XMD solver in MODFLOW-NWT,)it would be interesting to note the speedup of 
+UPCG compared to even more robust higher level ILU solvers which may be 
+even faster than PCG5 for hard problems. 
+6. Issues with GPGPU processing for different schemes are scattered 
+throughout the manuscript. These issues should be collated into a separate 
+section or a table. For instance: GPGPU memory requirements for larger 
+problems; need to maximize the amount of time spent in the linear solvers; 
+the overhead associated with GPGPU-CPU memory copy operations relative to 
+the solution time; higher percentage of runtime spent transferring 
+preconditioner data; why the total time spent applying the preconditioner 
+actually increases for the MILU0 preconditioner; what is less optimized in 
+Intel FORTRAN for multi-core processing; details on problem size 
+limitation due to RAM available on the GPGPU; and others. 
+
+Reviewer #2 (Written Evaluation (Required)): 
+
+I have reviewed all the contents of the manuscript "Use of general purpose 
+graphical processing units with MODFLOW-2005" by J. Hughes and J. White. 
+This work presents results of using the graphical processing unit (GPU) to 
+perform calculations needed to solve groundwater heads in in MODFLOW-2005. 
+Overall, I think this is a novel work, but I have some concerns. 
+1) Overall, lots of jargon is used. Naturally, this is an emerging field, 
+and one that many readers of Ground Water will not be familiar with, so 
+the use of jargon will be difficult for the uninitiated reader. For 
+example, lines 75-79 are filled with terms that will mean nothing to the 
+average groundwater modeler - consider deleting (or moving to appendix or 
+online material) this paragraph and other similar paragraphs that might 
+not hold much meaning to the average reader. 
+2) Thorough comparisons were made for different preconditioners and 
+different parallelization strategies and the authors did a great job of 
+making the comparisons fair. Considering the results of the various 
+preconditioners, it appears that Jacobi preconditioning is good enough for 
+many of the problems, which leads me to believe that the K fields are 
+fairly smooth (and the spread of the eigenvalues are nicely clustered). I 
+tend to think of this as the exception in rather than the rule in most 
+practical groundwater models. Can you provide guidance for using MIC vs. 
+POLY vs. Jacobi based on the K field? In other words, I think these 
+results are highly dependent on the K field and only 2 fields are used. 
+How would the results vary if you stretched the contrasts in your K field? 
+In that regard, to be fair, the GMG solver should also be used as a basis 
+for comparison and give insight about which strategy should be used for 
+optimal performance. 
+3) There seems to be a tradeoff between parallelizing on the CPU vs. the 
+GPU depending on the sophistication of the preconditioner. What is not 
+clear was if it Open-MP was used on PCG2. Reference is made to the work by 
+to Dong and Li, but it appears that this was not considered. How do these 
+results compare to that of Dong and Li? The intent here is not to say that 
+your results are better/worse than those of Dong and Li. Simply, not 
+everyone has access to a video card with double precision GPU 
+capabilities, whereas multicore CPU's seem to be more common, so some 
+guidance of which strategy might be more effective depending on the user's 
+hardware would be helpful (ie, If I were buying a new workstation, should 
+I focus on getting the best multicore CPU, or should I get a less powerful 
+CPU and spend money on a high-end GPU?) I understand that the answer to 
+this question is not straightforward, but any additional insights you 
+could provide regarding this tradeoff would be helpful. 
+Furthermore, I several minor items for your consideration 
+
+4) Line 26 - "can be *easily* parallelize" 
+5) Lines 28 - 34 - there is some time discrepancies here from 2005 to 
+1984, to 1988. Perhaps just say "MODFLOW" on line 28 and remove the "since 
+1984" and insert "numerous" before "two-and" 6) Line 47 "present" (plural) 
+7) Line 48 - unclear - faster at what exactly? Operations,cycles/second? 
+8) Lines 75-108 is filled with a lot of technical jargon. Consider moving 
+some of this to an appendix (as noted above). 9) Line 108 - really, the 
+parallelization you mention can be applied to many simulators, not just 
+MODFLOW-2005. Consider mentioning wider range applicability. 10) Line 
+213-214 - unclear. Consider rephrasing 11) Line 351 - "developed to *use* 
+the PCG" (one does not "solve" the algorithm) 12) Line376 - as indicated 
+above, can you provide some guidance here about when one approach might be 
+better than another depending on the system properties (size, K field). 
+Also, GMG should be included here to so that the full suite of approaches 
+are compared (weak but highly parallelizable to strong but not very 
+parallelizable). 13) Figure 4 - I think this figure is extremely important 
+as it shows where the speed ups occur. However, it is not clear how much 
+time is spent in the GPU for the matrix-vector and BLAS operations because 
+the bars seem to not show up on the scale? Can you include a value here so 
+the reader does not assume these are zero. 14) In light of the speed ups 
+coming from CUBLAS operations being parallelized over the cells in the 
+model, I am wondering if additional speed up could be obtained by using 
+other primitives in the CUSparse library for the triangular solves and/or 
+the decomposition? Was this considered as well? There is some new work 
+that tries to parallelize ILU (see: 
+http://research.nvidia.com/publication/parallel-incomplete-lu-and-cholesky-
+factorization-preconditioned-iterative-methods-gpu) 
+In summary, I think this manuscript presents some novel approaches for 
+exploiting parallel computations to solve groundwater flow problems using 
+MODFLOW. I think this is an emerging area, and as such, some additional 
+guidance regarding the various tradeoffs would make this article of 
+greater utility to the readers of Ground Water. 
+
+Reviewer #2 (Condense Files): 
+
+As indicated above lines 75-108 are filled with jargon and should be 
+reconsidered. 
+
+Reviewer #3 (Written Evaluation (Required)): 
+
+I found the manuscript is interesting but think need some revisions. 
+
+1.Quality of figures should be improved (all figures but in particular, 
+figures 3 to 6). Texts (titles and legends) are too small to read. Lines 
+are very hard to read. 2.Tables should be reworked. I do not think we need 
+3 digits after decimal point for these comparisons. Please also consider 
+significant digits in the tables. 3.The authors only consider total 
+execution time which includes time required for both Picard and linear 
+solver iterations. Did you closely examined these iteration performance in 
+solver comparisons? How these iteration performance changes among 
+different preconditioning schemes? 4.Lines 28-32: the authors mentioned 
+computational performance changes due to domain discretization. Does this 
+cause by FD formulation or matrix solver scheme? Explanation is needed. 
+5.Line 48: 448 -> 448 cores. 6.Line 114: is L3/L3T correct? 
+7.Line 123: is L2/T correct? 
+8.Line 161: What is CUBLAS? 
+9.Line 199: Problem Description. Reasoning for choosing test cases is 
+helpful for the readers. 10.Line 236: "(10-0)/1000"is not necessary. 
+
+
+
+
+
+

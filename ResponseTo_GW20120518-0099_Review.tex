@@ -28,9 +28,9 @@
 \today \\
 
 \noindent
-\textbf{Add some introductory text about how reviewer comments were helpful and have been addressed in the revised manuscript} 
+We greatly appreciate the comments provided by the three reviewers and the editor. We have addressed all of the comments in this document. In general, we have made all of the suggested modifications. In a few cases we disagreed with reviewer comments but have provided a justification for not accepting the comment. 
 
-Review comments are included (\textit{in italics}) prior to our responses. Revised material in the manuscript are indicated with \textcolor{blue}{blue} text.
+Reviewer comments are included (\textit{in italics}) prior to our responses. Revised material in the manuscript is indicated using \color{blue} blue \color{black}text. Text indicated in \color{cyan} cyan \color{black} in the revised manuscript represent changes in response to internal USGS reviewers. 
 
 \section*{Editor's Comments:}
 \begin{enumerate}
@@ -74,13 +74,21 @@ The authors disagree with this comment. We believe the issues related to solutio
 
 We have tried to eliminate all non-essential GPGPU jargon and make the main text more readable for the typical Ground Water reader.  A significant portion of the jargon has been moved to Boxes 1 and 2 as suggested by the editor.
 
-\item \textit{Thorough comparisons were made for different preconditioners and different parallelization strategies and the authors did a great job of making the comparisons fair. Considering the results of the various preconditioners, it appears that Jacobi preconditioning is good enough for many of the problems, which leads me to believe that the K fields are fairly smooth (and the spread of the eigenvalues are nicely clustered). I tend to think of this as the exception in rather than the rule in most practical groundwater models. Can you provide guidance for using MIC vs. POLY vs. Jacobi based on the K field? In other words, I think these results are highly dependent on the K field and only 2 fields are used. How would the results vary if you stretched the contrasts in your K field? In that regard, to be fair, the GMG solver should also be used as a basis for comparison and give insight about which strategy should be used for optimal performance.} 
+\item \label{kpropertydiscussion} \textit{Thorough comparisons were made for different preconditioners and different parallelization strategies and the authors did a great job of making the comparisons fair. Considering the results of the various preconditioners, it appears that Jacobi preconditioning is good enough for many of the problems, which leads me to believe that the K fields are fairly smooth (and the spread of the eigenvalues are nicely clustered). I tend to think of this as the exception in rather than the rule in most practical groundwater models. Can you provide guidance for using MIC vs. POLY vs. Jacobi based on the K field? In other words, I think these results are highly dependent on the K field and only 2 fields are used. How would the results vary if you stretched the contrasts in your K field? In that regard, to be fair, the GMG solver should also be used as a basis for comparison and give insight about which strategy should be used for optimal performance.} 
 
-Response. 
+Evaluation of the maximum and minimum eigenvalues for the original 1000 $\times$ 1000 problem suggests that there is clustering of eigenvalues in the original $\mathbf{A}$ matrix. It was not possible to evaluate the full spread of the eigenvalues because of the size of the $\mathbf{A}$ matrix. Evaluation of the eigenvalues of the final preconditioned matrix for the Jacobi preconditioner, however, indicates there are two clusters with the first ranging from approximately 2.5$\times 10^{-4}$ to 1$\times 10^{-2}$ and approximately 1.5$\times 10^{-2}$.
+
+To look at the effect that eigenvalue clustering has on the effectiveness of the Jacobi preconditioner we have evaluated a number of alternative problems in an effort to reduce the smoothness of the fields. The additional fields that were evaluated are based on the fields used to evaluate the performance of the UPCG solver presented in the manuscript and included: (1) random permutations values in the original fields; (2) fields that used the average hydraulic conductivity in select quantiles of the original fields (to develop a zoned field); (3) a constant field based on the mean hydraulic conductivity of the original fields; and (4) a stochastic field that used the same properties of the original fields except with a variance that varied over 5 orders of magnitude (the original varied over 3 orders of magnitude).  Evaluation of the eigenvalues of the final preconditioned matrix for the Jacobi preconditioner indicates that the eigenvalues for (1) are clustered in three groups with a cluster covering a large range from approximately 5$\times 10^{-4}$ to 7.5$\times 10^{-3}$, (2) show no visible signs of clustering, (3) show no visible signs of clustering, and (4) are clustered into two groups like the original field but span a larger range.
+
+For all of these alternative fields, the Jacobi preconditioner was able to sufficient to solve the problem and required a comparable number of iterations to solve the problem (approximately 4,500 iterations for the 1,000 $\times$ 1,000 $\times$ 1 problem) except for the fields with a larger variance (approximately 5,200 iterations for the 1,000 $\times$ 1,000 $\times$ 1 problem). The authors suspect the Jacobi preconditioner is sufficient in almost every case evaluated because of the number of iterations that are allowed (50,000). In fact, we were able to get the 4,000 $\times$ 4,000 $\times$ 1 problem to solve if the maximum number of iterations was increased (a solution was achieved in XX,XXX iterations).
+
+We have not included results for any of these additional simulations but have added additional discussion of how speedup may be affected by the hydraulic conductivity field has been added to the \textbf{Discussion} and \textbf{Conclusions} sections.
 
 \item \textit{There seems to be a tradeoff between parallelizing on the CPU vs. the GPU depending on the sophistication of the preconditioner. What is not clear was if it Open-MP was used on PCG2. Reference is made to the work by to Dong and Li, but it appears that this was not considered. How do these results compare to that of Dong and Li? The intent here is not to say that your results are better/worse than those of Dong and Li. Simply, not everyone has access to a video card with double precision GPU capabilities, whereas multicore CPU's seem to be more common, so some guidance of which strategy might be more effective depending on the user's hardware would be helpful (ie, If I were buying a new workstation, should I focus on getting the best multicore CPU, or should I get a less powerful CPU and spend money on a high-end GPU?) I understand that the answer to this question is not straightforward, but any additional insights you could provide regarding this tradeoff would be helpful.} 
 
-Response. 
+OpenMP was not evaluated on PCG2 but was considered using the UPCG solver. We believe we can accurately report on conditions under which use of a GPGPU solution would be preferred to an OpenMP solution and vice-versa based on (1) the similarity of the effectiveness of the UPCG solver with the MILU0 preconditioner and the PCG solver with the MIC preconditioner and (2) the fact that UPCG solver speedups with OpenMP are comparable to the Intel compiler results reported in Dong and Li (2009) . We have revised the \textbf{Conclusions} section (see response to \textbf{Reviewer 2 Comment~\ref{kpropertydiscussion}}). We have also evaluated the effect that Intel compiler optimization has on OpenMP speedups and have revised the \textbf{Discussion} section to reflect the observation that speedups were comparable with and without use of the -O3 compiler switch.
+
+We have also included our assessment of the best approach for being able to run a range of MODFLOW problems in parallel has been added to the \textbf{Conclusions} section.
 
 \item \textit{Line 26 - "can be *easily* parallelize"} 
 
@@ -116,7 +124,7 @@ Suggested modification made.
 
 \item \textit{Line 376 - as indicated above, can you provide some guidance here about when one approach might be better than another depending on the system properties (size, K field). Also, GMG should be included here to so that the full suite of approaches are compared (weak but highly parallelizable to strong but not very parallelizable). } 
 
-Response.
+See response to \textbf{Reviewer 2 Comment~\ref{kpropertydiscussion}}.
 
 \item \textit{Figure 4 - I think this figure is extremely important as it shows where the speed ups occur. However, it is not clear how much time is spent in the GPU for the matrix-vector and BLAS operations because the bars seem to not show up on the scale? Can you include a value here so the reader does not assume these are zero. } 
 
@@ -124,7 +132,7 @@ Figure 4 has been modified as suggested.
 
 \item \textit{In light of the speed ups coming from CUBLAS operations being parallelized over the cells in the model, I am wondering if additional speed up could be obtained by using other primitives in the CUSparse library for the triangular solves and/or the decomposition? Was this considered as well? There is some new work that tries to parallelize ILU (see: http://research.nvidia.com/publication/parallel-incomplete-lu-and-cholesky-factorization-preconditioned-iterative-methods-gpu) } 
 
-Response.
+We are aware of this work but have not attempted to implement it. One of the reasons we did not devote any time to its implementation is Naumov (2011) only reported an average speedup of 2.0 which is less than was observed with the GLSPOLY preconditioner. The work of Li and Saad (2010) pointed us in the direction of the GLSPOLY preconditioner. However, we have included a few sentences discussing recent work devoted to improving the effectiveness of incomplete factorization preconditioners in the \textbf{Conclusions} section.
 
 
 \end{enumerate}
@@ -141,7 +149,7 @@ Double-precision floating point variables are used in the solvers and the tables
 
 \item \textit{The authors only consider total execution time which includes time required for both Picard and linear solver iterations. Did you closely examined these iteration performance in solver comparisons? How these iteration performance changes among different preconditioning schemes? } 
 
-\textbf{Table 4} has been added which includes information on the number of iterations required for each of the solvers and various preconditioners. Additional discussion has been added in the \textbf{Discussion} section to provide some guidance on the strength of the preconditioners for the problems evaluated.
+A table has been added (revised \textbf{Table 1}) which includes information on the number of iterations required for each of the solvers and various preconditioners. Additional discussion has been added in the \textbf{Discussion} section to provide some guidance on the strength of the preconditioners for the problems evaluated.
 
 \item \textit{Lines 28-32: the authors mentioned computational performance changes due to domain discretization. Does this cause by FD formulation or matrix solver scheme? Explanation is needed. } 
 
@@ -153,11 +161,11 @@ Suggested addition made.
 
 \item \textit{Line 114: is L3/L3T correct? } 
 
-Yes.
+Yes. See \textbf{equation 2-2} in Harbaugh (2005).
 
 \item \textit{Line 123: is L2/T correct? } 
 
-Yes.
+Yes. See \textbf{equation 2-9} in Harbaugh (2005).
 
 \item \textit{Line 161: What is CUBLAS? } 
 

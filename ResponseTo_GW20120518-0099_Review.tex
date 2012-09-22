@@ -20,7 +20,7 @@
 \begin{document}
 
 \noindent
-\textbf{Use of general purpose graphical processing units with MODFLOW-2005 \\ (Ground Water Manuscript GW20120518-0099) }\\
+\textbf{Use of general purpose graphics processing units with MODFLOW \\ (Ground Water Manuscript GW20120518-0099) }\\
 
 \noindent
 \textbf{Authors:} Hughes, J.D., and White, J.T \\
@@ -28,9 +28,11 @@
 \today \\
 
 \noindent
-We greatly appreciate the comments provided by the three reviewers and the editor. We have addressed all of the comments in this document. In general, we have made all of the suggested modifications. In a few cases we disagreed with reviewer comments but have provided a justification for not accepting the comment. 
+We greatly appreciate the comments provided by the three journal reviewers and the editor. We have addressed all of the comments in this document. In general, we have made all of the suggested modifications. In a few cases, we disagreed with reviewer comments but have provided justification for all comments that were not accepted.
 
-Reviewer comments are included (\textit{in italics}) prior to our responses. Revised material in the manuscript is indicated using \color{blue} blue \color{black}text. Text indicated in \color{cyan} cyan \color{black} in the revised manuscript represent changes in response to internal USGS reviewers. 
+We have moved a significant amount of the GPGPU jargon to two sidebar boxes based on the editor's suggestion. We believe moving the jargon to sidebar boxes makes the manuscript more readable. The peer reviewer comments were outstanding and if possible we would like to acknowledge them if they are willing to be identified.
+
+Reviewer comments are included (\textit{in italics}) prior to our responses. Material revised based on journal reviewer comments are indicated using \color{blue} blue \color{black}text in the revised manuscript. \color{cyan} cyan \color{black}text in the revised manuscript represent changes made in response to internal USGS reviewers. 
 
 \section*{Editor's Comments:}
 \begin{enumerate}
@@ -90,15 +92,15 @@ OpenMP was not evaluated on PCG2 but was considered using the UPCG solver. We be
 
 We have also included our assessment of the best approach for being able to run a range of MODFLOW problems in parallel has been added to the \textbf{Conclusions} section.
 
-\item \textit{Line 26 - "can be *easily* parallelize"} 
+\item \textit{Line 26 - ``can be *easily* parallelize"} 
 
 Suggested addition made. 
 
-\item \textit{Lines 28 - 34 - there is some time discrepancies here from 2005 to 1984, to 1988. Perhaps just say "MODFLOW" on line 28 and remove the "since 1984" and insert "numerous" before "two-and" } 
+\item \textit{Lines 28 - 34 - there is some time discrepancies here from 2005 to 1984, to 1988. Perhaps just say "MODFLOW" on line 28 and remove the ``since 1984" and insert ``numerous" before ``two-and" } 
 
 Suggested modification made. Also MODFLOW-2005 has been replaced with MODFLOW in the revised manuscript except where it is necessary to specifically discuss the current version of MODFLOW.
 
-\item \textit{Line 47 "present" (plural)} 
+\item \textit{Line 47 ``present" (plural)} 
 
 Correction made. 
 
@@ -118,7 +120,7 @@ We have added text to indicate that GPGPU parallelization has great potential fo
 
 This sentence has been rephrased to clarify the description of the thickness of layer 1.
 
-\item \textit{Line 351 - "developed to *use* the PCG" (one does not "solve" the algorithm) } 
+\item \textit{Line 351 - ``developed to *use* the PCG" (one does not "solve" the algorithm) } 
 
 Suggested modification made.
 
@@ -175,7 +177,7 @@ CUBLAS and BLAS have been defined.
 
 Additional discussion of the reasons the particular test cases were evaluated has been provided.
 
-\item \textit{Line 236: "(10-0)/1000"is not necessary.} 
+\item \textit{Line 236: ``(10-0)/1000"is not necessary.} 
 
 Suggested modification made.
 

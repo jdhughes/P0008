@@ -1,0 +1,53 @@
+\documentclass[12pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+\usepackage{geometry} % to change the page dimensions
+\geometry{letterpaper} % or letterpaper (US) or a5paper or....
+\geometry{margin=1in} % for example, change the margins to 2 inches all round
+
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{color}
+
+\usepackage{amsmath}
+
+\usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+
+\begin{document}
+
+\noindent
+\textbf{Use of general purpose graphics processing units with MODFLOW \\ (Ground Water Manuscript GW20120518-0099R) }\\
+
+\noindent
+\textbf{Authors:} Hughes, J.D., and White, J.T \\
+
+\today \\
+
+\noindent
+We greatly appreciate the comments provided by the associate editor. We have addressed all of the comments in this document. Associate editor comments are included (\textit{in italics}) prior to our responses. 
+
+\section*{Associate Editor's Comments:}
+\begin{enumerate}
+\item \textit{Line 89-90 "function" (singular) or delete "a" if you want plural}
+
+Revised to singular "function" and "kernel".
+
+\item \textit{Line 104 - CCFD is not defined yet (I assume you mean cell centered finite difference)}
+
+CCFD is defined in the second sentence of the introduction.
+
+\item \textit{Line 144 - axpy is not defined yet. Maybe a sidebar could be used for a quick description of BLAS and you could move material from line 156-157 there too?} 
+
+Added definition of \texttt{axpy}. Did not add another sidebar for a description of BLAS and BLAS routines because we do not believe it would improve the readability of the manuscript.
+
+\item \textit{Line 196-199 - this sentence seems incomplete to me. After "problem" maybe insert the word "was designed" or "was created" or something similar.}
+
+Corrected the sentence.
+
+\end{enumerate}
+
+\end{document}

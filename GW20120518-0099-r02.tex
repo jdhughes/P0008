@@ -67,7 +67,7 @@ In this paper, we evaluate speedups resulting from GPGPU parallelization of the 
 \section* {\bf GPGPU Parallel Programming}
 GPGPU code developed using the NVIDIA$^{\textregistered}$ CUDA API is essentially a sequential code that is capable of using the fork-join model of parallel execution similar to OpenMP. In a fork-join model, a single master thread is active when program execution begins. The master thread executes sequential portions of the code. At points where parallel operations are required, the master thread spawns, or forks, additional threads that work concurrently with the master thread through the parallel section. At the end of the parallel code, the spawned threads are suspended and rejoined to the master thread. The fork-join model used in OpenMP is shown graphically in \textbf{figure~\ref{FigParallel}}. Typically, the number of OpenMP threads used in the fork-join model is less than the total number of cores available on multi-core CPUs.
 
-For GPGPU code implementations, the concept is similar to OpenMP.  The main code is a sequential host code, which forks the data into many threads at the invocation of a CUDA functions, called kernels (\textbf{Box 1}).  However, as opposed to the few threads spawned by OpenMP, GPGPUs have the potential to spawn thousands to tens of thousands of threads to execute the CUDA kernel function (\textbf{Box 2}). The NVIDIA Tesla C2050 used to evaluate the UPCG solver in this study can execute 21,504 concurrent threads.  With thread counts on the order of tens of thousands, GPGPUs have great potential for parallelization  for MODFLOW and other numerical simulators that use Krylov subspace methods to solve large systems of simultaneous linear equations.
+For GPGPU code implementations, the concept is similar to OpenMP.  The main code is a sequential host code, which forks the data into many threads at the invocation of a CUDA function, called a kernel (\textbf{Box 1}).  However, as opposed to the few threads spawned by OpenMP, GPGPUs have the potential to spawn thousands to tens of thousands of threads to execute the CUDA kernel function (\textbf{Box 2}). The NVIDIA Tesla C2050 used to evaluate the UPCG solver in this study can execute 21,504 concurrent threads.  With thread counts on the order of tens of thousands, GPGPUs have great potential for parallelization  for MODFLOW and other numerical simulators that use Krylov subspace methods to solve large systems of simultaneous linear equations.
 
 
 \section* {\bf Conjugate Gradient Linear Solver}
@@ -131,7 +131,7 @@ The conjugate gradient (CG) iterative method is an efficient method for solving 
 
 In \textbf{algorithm~\ref{pcgalg}}, $\mathbf{r}$ is the difference between the left and right side (residual) of \textbf{equation~\ref{lineareq}} [L$^3$/T], $i$ is the linear iteration index [unitless], $maxinner$ is a user-specified maximum number of iterations to perform [unitless], $\mathbf{M}$ is the preconditioned form of $\mathbf{A}$ [L$^2$/T], $\mathbf{z}$ is the solution resulting from application of $\mathbf{M}$ to $\mathbf{r}$ [L$^3$/T], $\mathbf{p}$ is the orthogonal search direction [L], $\beta$ is a scalar used to determine the next search direction [unitless], $\mathbf{q}$ is the residual change resulting from multiplication of $\mathbf{A}$ and the search direction $\mathbf{p}$ [L$^3$/T], $\alpha$ is the step-size [unitless]. Readers are referred to Barrett \textit{et al.} (1994) for more information on the PCG method.
 
-All linear iteration steps, except for application of the zero fill-in incomplete LU (ILU0) and MILU0 preconditioners in line 3 of \textbf{algorithm~\ref{pcgalg}}, include operations that are independent for each active groundwater cell, indicating a potential for parallelization. In cases where (1) no preconditioner ($\mathbf{z = r}$) or (2) a Jacobi preconditioner ($\mathbf{M = I D}^{-1}$ -- where $\mathbf{I}$ is the identity matrix and $\mathbf{D}^{-1}$ is a matrix that only contains the inverse of the diagonal elements of $\mathbf{A}$), is selected, application of the preconditioner is highly parallelizable. For most practical problems, non-preconditioned and the Jacobi preconditioners will not significantly reduce the number of linear iterations ($i$) required to achieve convergence (Li and Saad 2010). As a result better preconditioners, such as incomplete factorizations (ILU0 or MILU0) or m-degree polynomial (GLSPOLY) approximations of $\mathbf{A}$, are generally needed. Application of the incomplete factorization preconditioners requires a forward substitution ($\mathbf{Ly = b}$ -- where $\mathbf{L}$ is the lower triangular portion of $\mathbf{A}$) followed by a backward substitution ($\mathbf{Uz = y}$ – where $\mathbf{U}$ is upper triangular portion of $\mathbf{A}$) and is difficult to efficiently parallelize (Barrett \textit{et al.} 1994). Preconditioning using polynomial preconditioners, however, is simple, efficient, and easy to parallelize because polynomial preconditioner application only requires a limited number of operations (Liang \textit{et al.} 2002; Saad 2003); the operations required to apply a polynomial preconditioner in \textbf{algorithm~\ref{pcgalg}} include (1) matrix-vector products and (2) addition of a vector multiplied by a constant to another vector (\texttt{axpy}).
+All linear iteration steps, except for application of the zero fill-in incomplete LU (ILU0) and MILU0 preconditioners in line 3 of \textbf{algorithm~\ref{pcgalg}}, include operations that are independent for each active groundwater cell, indicating a potential for parallelization. In cases where (1) no preconditioner ($\mathbf{z = r}$) or (2) a Jacobi preconditioner ($\mathbf{M = I D}^{-1}$ -- where $\mathbf{I}$ is the identity matrix and $\mathbf{D}^{-1}$ is a matrix that only contains the inverse of the diagonal elements of $\mathbf{A}$), is selected, application of the preconditioner is highly parallelizable. For most practical problems, non-preconditioned and the Jacobi preconditioners will not significantly reduce the number of linear iterations ($i$) required to achieve convergence (Li and Saad 2010). As a result better preconditioners, such as incomplete factorizations (ILU0 or MILU0) or m-degree polynomial (GLSPOLY) approximations of $\mathbf{A}$, are generally needed. Application of the incomplete factorization preconditioners requires a forward substitution ($\mathbf{Ly = b}$ -- where $\mathbf{L}$ is the lower triangular portion of $\mathbf{A}$) followed by a backward substitution ($\mathbf{Uz = y}$ – where $\mathbf{U}$ is upper triangular portion of $\mathbf{A}$) and is difficult to efficiently parallelize (Barrett \textit{et al.} 1994). Preconditioning using polynomial preconditioners, however, is simple, efficient, and easy to parallelize because polynomial preconditioner application only requires a limited number of operations (Liang \textit{et al.} 2002; Saad 2003); the operations required to apply a polynomial preconditioner in \textbf{algorithm~\ref{pcgalg}} include (1) matrix-vector products and (2) addition of a vector-scalar product to another vector (referred to as \texttt{axpy}, which is short for \textbf{a}lpha times \textbf{x} \textbf{p}lus \textbf{y}).
 
 \subsection*{Numerical Implementation}
 The unstructured preconditioned conjugate gradient (UPCG) linear solver was coded to allow solution of the groundwater flow equation on either the CPU, GPGPU, or combination of CPU and GPGPU using double precision operations. Execution of the UPCG solver on the CPU, GPGPU, or combination of CPU and GPGPU is specified by the user in the UPCG input file.
@@ -140,7 +140,7 @@ Although the connectivity of the finite-difference discretization used in MODFLO
 
 Available CUBLAS matrix-vector products and vector operations were used to parallelize the GPGPU capabilities of the UPCG linear solver. Because of the poor performance of forward and back substitution operations used by the ILU0 and MILU0 preconditions observed during initial testing of the UPCG linear solver and observed by others (Li and Saad 2010), application of these preconditioners is performed on the CPU, resulting in a hybrid CPU/GPGPU solver. The results of the matrix-vector product, calculated by application of the ILU0 and MILU0 preconditioners on the CPU, is accessed as page locked memory by the GPGPU to achieve higher memory bandwidth.
 
-For parallel CPU simulations, OpenMP directives were added to all matrix-vector products and vector operations. The OpenMP matrix-vector product was constructed using a level-2 BLAS general matrix-vector (GEMV) product approach because of the slight increase in performance of this approach over dot-product and \texttt{axpy} approaches for calculating matrix vector products (Petersen and Arbenz 2004). OpenMP directives \texttt{NUM\_THREADS} and \texttt{SCHEDULE STATIC} were used in all OpenMP routines to allow the user to control the number of OpenMP threads and reduce OpenMP scheduling/synchronization overhead, respectively. The number of OpenMP threads used for matrix-vector products and vector operations is specified separately in the UPCG input file. For sequential CPU simulations, separate matrix-vector product and vector operation routines that exclude OpenMP directives are used to eliminate all OpenMP overhead.
+For parallel CPU simulations, OpenMP directives were added to all matrix-vector products and vector operations. The OpenMP matrix-vector product was constructed using a level-2 BLAS general matrix-vector (\texttt{GEMV}) product approach because of the slight increase in performance of this approach over dot-product and \texttt{axpy} approaches for calculating matrix vector products (Petersen and Arbenz 2004). OpenMP directives \texttt{NUM\_THREADS} and \texttt{SCHEDULE STATIC} were used in all OpenMP routines to allow the user to control the number of OpenMP threads and reduce OpenMP scheduling/synchronization overhead, respectively. The number of OpenMP threads used for matrix-vector products and vector operations is specified separately in the UPCG input file. For sequential CPU simulations, separate matrix-vector product and vector operation routines that exclude OpenMP directives are used to eliminate all OpenMP overhead.
 
 Infinity norms ($\left \|  x \right \|_{\infty}$) are used to evaluate convergence of the UPCG linear solver with respect to the change in $\mathbf{h}$ (HCLOSE) and $\mathbf{r}$ (RCLOSE). In MODFLOW, non-linearities are resolved using Picard iteration. Picard iteration is implemented such that the $\mathbf{A}$ matrix is formulated using the latest estimate of $\mathbf{h}$, then $\mathbf{h}$ and $\mathbf{r}$ are updated using a linear solver. This process is continued until the maximum change in $h$ and $r$ in any model cell is less than HCLOSE and RCLOSE, respectively, on the first iteration ($i$=1) of the linear solver or the maximum number of Picard (outer) iterations is exceeded; the UPCG solver approach for evaluating convergence is identical to the standard MODFLOW PCG solver (Hill 1990).
 
@@ -148,7 +148,7 @@ Infinity norms ($\left \|  x \right \|_{\infty}$) are used to evaluate convergen
 \section* {\bf Test Cases}
 The performance of the GPGPU implementation of the UPCG linear solver was evaluated on a NVIDIA Tesla C2050 GPGPU with 3 GB of RAM and capable of 515 GFLOP/sec of double precision processing performance (NVIDIA compute capability 2.0). The GPGPU was mounted in a 16-pin PCI local bus on a single quad core Intel Xeon 3GHz CPU, capable of executing 4 threads per CPU, with 6 GB of RAM and running a 64-bit version of the Windows 7 Enterprise OS. For comparison with GPGPU results, serial and parallel CPU simulations were executed on dual 4-core Intel Xeon 2.4 GHz CPUs, capable of executing 8 parallel threads, with 16 GB of RAM running a 64-bit version of the Windows Server 2008 R2 Standard OS (Service Pack 1).
 
-To evaluate the performance of the GPGPU implementation of the UPCG linear solver a  synthetic test problem with aquifer properties and boundary conditions that result in equivalent problems and scalable runtimes when discretized using different horizontal and vertical cell sizes. The test problem represents an unconfined aquifer to increase the difficulty of the problem by making it non-linear because of the dependence of the $\mathbf{A}$ matrix in \textbf{equation~\ref{lineareq}} on the solution of $\mathbf{h}$. Furthermore, the test problems used realistic initial conditions sufficiently far from final results to start with an incorrect $\mathbf{A}$ matrix to maximize (1) head changes during solution of the problem and (2) the number of Picard iterations required to achieve a solution.
+To evaluate the performance of the GPGPU implementation of the UPCG linear solver we constructed a synthetic test problem having aquifer properties and boundary conditions that could be scaled to models with different horizontal and vertical cell sizes but still produce equivalent results and scalable runtimes. The test problem represents an unconfined aquifer to increase the difficulty of the problem by making it non-linear because of the dependence of the $\mathbf{A}$ matrix in \textbf{equation~\ref{lineareq}} on the solution of $\mathbf{h}$. Furthermore, the test problems used realistic initial conditions sufficiently far from final results to start with an incorrect $\mathbf{A}$ matrix to maximize (1) head changes during solution of the problem and (2) the number of Picard iterations required to achieve a solution.
 
 \subsection*{Problem Description}
 GPGPU and parallel CPU results were evaluated using a number of horizontal and vertical model discretizations of a 1,000 m $\times$ 1,000 m  heterogeneous unconfined aquifer. The top and bottom of the aquifer are flat and specified to have elevations of 10 and -30 m, respectively. Models with horizontal discretizations of 200 $\times$ 200, 500 $\times$ 500, 1,000 $\times$ 1,000, 2,000 $\times$ 2,000, and 4,000 $\times$ 4,000 cells per layer were evaluated. Single layer models were evaluated for all horizontal discretizations and multi-layer models were evaluated for select horizontal discretizations to determine the effect that a 7-point stencil, and the resulting additional non-zero entries for each cell, has on GPGPU and parallel CPU execution time. Two- and three-layer models were evaluated for all horizontal discretizations except 4,000 $\times$ 4,000 cells per layer. Ten-layer models were also evaluated for horizontal discretizations ranging from 200 $\times$ 200 to 1,000 $\times$ 1,000 cells per layer. Additional horizontal and vertical discretizations were not evaluated because of GPGPU memory requirements for larger problems. For multi-layer models, a constant layer thickness was used for all but the first layer and was calculated by dividing 30 m by the number of layers. Layer 1 also includes the thickness of the aquifer above the arbitrary elevation of 0 m and therefore is 10 m thicker than layer 2.
@@ -210,7 +210,7 @@ The authors are grateful to Vevek Bedekar, Randall T. Hanson, and Yong Liu for t
 
 Source code for MODFLOW (MODFLOW--2005 version) with the UPCG solver is available at \url{https://github.com/jdhughes-usgs/modflow-2005-upcg}. Development and compilation of CUDA and CUBLAS functions requires installation of the CUDA toolkit, which includes the necessary CUDA drivers. NVIDIA also provides GPGPU code samples in the CUDA software development kit (SDK). Current versions of each of these are available free of charge from NVIDIA at \url{http://www.nvidia.com/content/cuda/cuda-downloads.html}. A 64-bit version of the MODFLOW--2005 executable with the UPCG solver and the linked OpenMP dynamic-link library (DLL) for the Windows 7 operating system and the Tesla C2050 GPGPU is also available at \url{https://github.com/jdhughes-usgs/modflow-2005-upcg} and only requires installation of the CUDA drivers, which are also available as a stand-alone installation from NVIDIA, and a GPGPU with NVIDIA Compute Capability 2.0 or greater. This executable was linked against version 4.1.28 of the 64-bit CUDA toolkit. It is possible that the software may need to be modified for application of the code on GPGPU models other than the Tesla C2050. And finally, UPCG solver input instructions and python scripts used to create the MODFLOW datasets evaluated using the standard PCG solver with the MIC preconditioner and the UPCG solver are also available at \url{https://github.com/jdhughes-usgs/modflow-2005-upcg}.
 
-Although this software has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the software program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.  Although the software has been tested, there could be undetected errors. Users are encouraged to report any errors to these authors.  Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.  
+Although this software has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the software program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.  Although the software has been tested, there could be undetected errors. Users are encouraged to report any errors to these authors.  Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
 \section*{\bf References}
 \begin{description}
@@ -282,7 +282,7 @@ Although this software has been used by the U.S. Geological Survey (USGS), no wa
 \parbox[c]{5.75in}{\label{GPGPUbox1}
 \textbf{\\Box 1\\Developing Software for GPGPUs}
 
-To use GPGPUs, specialized software must be developed to use a precompiled set of functions and routines that serve as a communication mechanism between a CPU and one or more GPGPU and pass instructions to the GPGPU.  These precompiled functions and routines are typically bundled into a code library that is accessed using a application programming interface (API).  
+To use GPGPUs, specialized software must be developed to use a precompiled set of functions and routines that serve as a communication mechanism between a CPU and one or more GPGPU and pass instructions to the GPGPU.  These precompiled functions and routines are typically bundled into a code library that is accessed using a application programming interface (API).
 
 \hspace{15pt}Kernels are blocks of code that are executed only on the GPGPU.  When the code is compiled, the compiler is instructed to use the API functions and routines to resolve the kernel block of code into GPGPU instructions. The kernels executed by the UPCG solver on the GPGPU are the CUDA-enabled BLAS operations in the preconditioned conjugate gradient algorithm.\\ }}
 \bigskip
@@ -421,7 +421,6 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
 
 \begin{figure}
  	\centering
-  	%\includegraphics[width=17.15cm]{Figure1.png}
 	\caption{(A) Fork-join parallel model. The master thread executes sequential operations and initiates thread forks used in parallel regions. Adapted from Dong and Li (2009). (B) GPGPU architecture showing the relation of streaming multiprocessors and CUDA cores. The fork-join parallel model is applied to blocks of code being executed by thread processing units on multiple streaming multiprocessors.}
 	\label{FigParallel}
 \end{figure}
@@ -429,57 +428,24 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
 %Figure 2
 \begin{figure}
 	\centering
-  	%\includegraphics[width=8.25cm]{Figure2.png}
  	\caption{Model domain showing the distribution of hydraulic conductivity and boundary conditions applied to a hypothetical unconfined aquifer. A total of 1,000 m$^{3}$/day are withdrawn from 4 pumping wells. Steady-state groundwater head contours (1 m contour interval) are also shown. Note the effect that groundwater withdrawals and hydraulic conductivity have on simulated groundwater heads.}
 	\label{FigModelDomain}
 \end{figure}
 
 %Figure 3
 \begin{figure}
-	%\begin{subfigure}[b]{0.5\textwidth}
-	%	\centering
-  	%	\includegraphics[width=8.25cm]{Figure3a.png}
-	%\end{subfigure}
-	%\begin{subfigure}[b]{0.5\textwidth}
-	%	\centering
-  	%	\includegraphics[width=8.25cm]{Figure3b.png}
-	%\end{subfigure}
  	\caption{Speedup of UPCG solver GPGPU simulations with the (A) MILU0 and (B) GLSPOLY preconditioners relative to sequential UPCG solver simulations executed on the CPU. Note the different scales used for MILU0 and GLSPOLY speedup.}
 	\label{FigCPUGPUResults}
 \end{figure}
 
 %Figure 4
 \begin{figure}
-%	\begin{subfigure}[b]{0.5\textwidth}
-%		\centering
-%  		\includegraphics[width=8.25cm]{Figure4a.png}
-%	\end{subfigure}
-%	\begin{subfigure}[b]{0.5\textwidth}
-%		\centering
-%  		\includegraphics[width=8.25cm]{Figure4b.png}
-%	\end{subfigure}
-%	\begin{subfigure}[b]{0.5\textwidth}
-%		\centering
-%  		\includegraphics[width=8.25cm]{Figure4c.png}
-%	\end{subfigure}
-%	\begin{subfigure}[b]{0.5\textwidth}
-%		\centering
-%  		\includegraphics[width=8.25cm]{Figure4d.png}
-%	\end{subfigure}
  	\caption{Time, in seconds, spent applying the preconditioner, calculating matrix-vector products, calculating \texttt{axpy}, calculating all other vector operations, and transferring data between the CPU and GPGPU for (A) 2,000 $\times$ 2,000 $\times$ 3 problem using the MILU0 preconditioner, (B) 4,000 $\times$ 4,000 $\times$ 1 problem using the MILU0 preconditioner, (C) 2,000 $\times$ 2,000 $\times$ 3 problem using the GLSPOLY preconditioner, and (D) 4,000 $\times$ 4,000 $\times$ 1 problem using the GLSPOLY preconditioner. Note operation execution times have been normalized using the maximum preconditioner application time for each problem to facilitate comparison of different model runs.}
 	\label{FigBLASOperationResults}
 \end{figure}
 
 %Figure 5
 \begin{figure}
-%	\begin{subfigure}[b]{0.5\textwidth}
-%		\centering
-%  		\includegraphics[width=8.25cm]{Figure5a.png}
-%	\end{subfigure}
-%	\begin{subfigure}[b]{0.5\textwidth}
-%		\centering
-%  		\includegraphics[width=8.25cm]{Figure5b.png}
-%	\end{subfigure}
  	\caption{Speedup of UPCG solver GPGPU simulations with the (A) MILU0 and (B) GLSPOLY preconditioners relative to simulations performed using the PCG solver with the modified incomplete Cholesky (MIC) preconditioner.}
 	\label{FigGPUResults}
 \end{figure}
@@ -487,7 +453,6 @@ A GPGPU is a set of streaming multiprocessors (SM), each having many CUDA cores 
 %Figure 6
 \begin{figure}
 	\centering
-%  	\includegraphics[width=8.25cm]{Figure6.png}
  	\caption{Speedup of parallel CPU simulations using the UPCG solver with the MILU0 preconditioner and 7 threads relative to simulations performed using the PCG solver with the modified incomplete Cholesky (MIC) preconditioner.}
 	\label{FigOpenMPResults}
 \end{figure}
